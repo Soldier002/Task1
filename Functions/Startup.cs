@@ -1,12 +1,13 @@
 ﻿using Azure.Storage.Blobs;
+using Functions;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-[assembly: FunctionsStartup(typeof(Task1.Startup))]
+[assembly: FunctionsStartup(typeof(Startup))]
 
-namespace Task1;
+namespace Functions;
 
 public class Startup : FunctionsStartup
 {

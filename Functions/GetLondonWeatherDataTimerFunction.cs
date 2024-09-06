@@ -9,7 +9,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 
-namespace Task1
+namespace Functions
 {
     public class GetLondonWeatherDataTimerFunction
     {
@@ -24,7 +24,7 @@ namespace Task1
         }
 
         [FunctionName("GetLondonWeatherDataTimerFunction")]
-        public async Task Run([TimerTrigger("*/5 * * * * *")]TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("*/5 * * * * *")] TimerInfo myTimer, ILogger log)
         {
             var response = await _client.GetAsync(_weatherApi);
             var contentString = await response.Content.ReadAsStringAsync();
