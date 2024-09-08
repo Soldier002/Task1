@@ -1,4 +1,5 @@
 ﻿using Interfaces.Persistence.TableStorage.Models.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Interfaces.Services.Services
 {
     public interface IGetLogsForPeriodService
     {
-        Task<IList<WeatherApiCallLog>> Execute(DateTime from, DateTime to);
+        Task<string> Execute(HttpRequest httpRequest);
     }
 }

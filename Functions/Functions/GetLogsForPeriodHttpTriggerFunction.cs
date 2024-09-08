@@ -22,20 +22,10 @@ namespace Functions.Functions
 
         [FunctionName("GetLogsForPeriodHttpTriggerFunction")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest request, ILogger logger)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            string from = req.Query["from"];
-            string to = req.Query["to"];
-
-            var fromDt = DateTime.Parse(from);
-            var toDt = DateTime.Parse(to);
-
-            var entities = await _getLogsForPeriodService.Execute(fromDt, toDt);
-
-            var data = JsonConvert.SerializeObject(entities);
+            logger.LogInformation("C# HTTP trigger function processed a request.");
+            var data = await _getLogsForPeriodService.Execute(request);
 
             return new OkObjectResult(data);
         }

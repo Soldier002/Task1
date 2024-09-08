@@ -10,6 +10,7 @@ using Interfaces.Persistence.TableStorage.Mappers;
 using Interfaces.Persistence.TableStorage.Repositories;
 using Interfaces.Services.Services;
 using Interfaces.Utils.Configuration;
+using Interfaces.Utils.Parsers;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,7 @@ using Persistence.TableStorage.Repositories;
 using Services.Services;
 using System;
 using Utils.Configuration;
+using Utils.Parsers;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
@@ -45,5 +47,6 @@ public class Startup : FunctionsStartup
         builder.Services.AddTransient<IOpenWeatherMapApiClient, OpenWeatherMapApiClient>();
         builder.Services.AddTransient<IGetLogsForPeriodService, GetLogsForPeriodService>();
         builder.Services.AddTransient<IKeysMapper, KeysMapper>();
+        builder.Services.AddTransient<IDateTimeParser, DateTimeParser>();
     }
 }
