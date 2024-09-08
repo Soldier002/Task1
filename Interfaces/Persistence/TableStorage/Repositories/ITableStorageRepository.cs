@@ -10,5 +10,7 @@ namespace Interfaces.Persistence.TableStorage.Repositories
     public interface ITableStorageRepository
     {
         Task Save(WeatherApiCallLog weatherApiCallLog);
+
+        Task<IList<WeatherApiCallLog>> GetAll(DateTime from, DateTime to);
     }
 }
