@@ -9,6 +9,7 @@ namespace Interfaces.Persistence.TableStorage.Models.Dtos
     public class Keys
     {
         public string PartitionKey { get; set; }
+
         public string RowKey { get; set; }
     }
 }

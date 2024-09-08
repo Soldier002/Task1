@@ -15,7 +15,7 @@ namespace Persistence.TableStorage.Mappers
             return new Keys
             {
                 PartitionKey = dateTime.ToString("yyyyMMdd"),
-                RowKey = dateTime.ToString("HHmmss")
+                RowKey = dateTime.ToString("HHmmss"),
             };
         }
     }

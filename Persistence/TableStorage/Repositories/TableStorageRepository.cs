@@ -44,16 +44,15 @@ namespace Persistence.TableStorage.Repositories
             TableClient tableClient = tableServiceClient.GetTableClient("weatherData");
             await tableClient.CreateIfNotExistsAsync();
 
-            Expression<Func<WeatherApiCallLog, bool>> oneDayQuery = (x => 
+            Expression<Func<WeatherApiCallLog, bool>> oneDayQuery = x =>
                 x.PartitionKey == fromKeys.PartitionKey
                 && x.RowKey.CompareTo(fromKeys.RowKey) >= 0
-                && x.RowKey.CompareTo(toKeys.RowKey) <= 0);
+                && x.RowKey.CompareTo(toKeys.RowKey) <= 0;
 
-            Expression<Func<WeatherApiCallLog, bool>> manyDaysQuery = (x =>
+            Expression<Func<WeatherApiCallLog, bool>> manyDaysQuery = x =>
                     (x.PartitionKey.CompareTo(fromKeys.PartitionKey) > 0 && x.PartitionKey.CompareTo(toKeys.PartitionKey) < 0)
                     || (x.PartitionKey.CompareTo(fromKeys.PartitionKey) == 0 && x.RowKey.CompareTo(fromKeys.RowKey) >= 0)
-                    || (x.PartitionKey.CompareTo(toKeys.PartitionKey) == 0 && x.RowKey.CompareTo(toKeys.RowKey) <= 0)
-                    );
+                    || (x.PartitionKey.CompareTo(toKeys.PartitionKey) == 0 && x.RowKey.CompareTo(toKeys.RowKey) <= 0);
 
             var query = fromKeys.PartitionKey == toKeys.PartitionKey ? oneDayQuery : manyDaysQuery;
 

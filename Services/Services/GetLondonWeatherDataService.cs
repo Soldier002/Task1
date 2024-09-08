@@ -30,7 +30,7 @@ namespace Services.Services
                 Success = weatherApiResponse.IsSuccessStatusCode,
                 HttpStatusCode = (int)weatherApiResponse.StatusCode,
                 RowKey = executionDateTime.ToString("HHmmss"),
-                PartitionKey = executionDateTime.ToString("yyyyMMdd")
+                PartitionKey = executionDateTime.ToString("yyyyMMdd"),
             };
 
             var weatherDataStream = weatherApiResponse.Content.ReadAsStream();
