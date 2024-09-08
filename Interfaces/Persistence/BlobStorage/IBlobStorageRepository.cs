@@ -8,6 +8,6 @@ namespace Interfaces.Persistence.BlobStorage
 {
     public interface IBlobStorageRepository
     {
-        Task SaveWeatherData(string weatherData);
+        Task<string> SaveWeatherData(Stream weatherData, DateTime now);
     }
 }

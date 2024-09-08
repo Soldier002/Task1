@@ -22,10 +22,10 @@ namespace Functions.Functions
         }
 
         [FunctionName("GetLondonWeatherDataTimerFunction")]
-        public async Task Run([TimerTrigger("*/5 * * * * *")] TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("*/5 * * * * *")] TimerInfo timerInfo, ILogger log)
         {
             log.LogInformation("GetLondonWeatherDataTimerFunction start");
-            await _getLondonWeatherDataService.Execute();
+            await _getLondonWeatherDataService.Execute(DateTime.UtcNow);
             log.LogInformation("GetLondonWeatherDataTimerFunction end");
         }
     }

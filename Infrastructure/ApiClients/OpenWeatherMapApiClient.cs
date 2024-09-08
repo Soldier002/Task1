@@ -18,12 +18,11 @@ namespace Infrastructure.ApiClients
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        public async Task<string> GetWeatherInLondon()
+        public async Task<HttpResponseMessage> GetWeatherInLondon()
         {
             var response = await _httpClient.GetAsync(_weatherApi);
-            var contentString = await response.Content.ReadAsStringAsync();
 
-            return contentString;
+            return response;
         }
     }
 }

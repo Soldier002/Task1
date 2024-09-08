@@ -8,6 +8,6 @@ namespace Interfaces.Services.Services
 {
     public interface IGetLondonWeatherDataService
     {
-        Task Execute();
+        Task Execute(DateTime executionDateTime);
     }
 }

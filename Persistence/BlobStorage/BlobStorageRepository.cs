@@ -17,20 +17,16 @@ namespace Persistence.BlobStorage
             _blobServiceClient = blobServiceClient;
         }
 
-        public async Task SaveWeatherData(string weatherData)
+        public async Task<string> SaveWeatherData(Stream weatherData, DateTime now)
         {
             var containerClient = _blobServiceClient.GetBlobContainerClient("weather-data");
             await containerClient.CreateIfNotExistsAsync();
 
-            string blobName = $"weather-{DateTime.UtcNow:yyyy-MM-dd-HH-mm-ss}.json";
-
+            string blobName = $"weather-{now:yyyy-MM-dd-HH-mm-ss}.json";
             var blobClient = containerClient.GetBlobClient(blobName);
-            byte[] data = Encoding.UTF8.GetBytes(weatherData);
+            await blobClient.UploadAsync(weatherData);
 
-            using (var stream = new MemoryStream(data))
-            {
-                await blobClient.UploadAsync(stream);
-            }
+            return blobName;
         }
     }
 }
