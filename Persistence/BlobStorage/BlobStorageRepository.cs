@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Interfaces.Persistence.BlobStorage;
+using Interfaces.Persistence.BlobStorage.Clients;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +11,16 @@ namespace Persistence.BlobStorage
 {
     public class BlobStorageRepository : IBlobStorageRepository
     {
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IBlobContainerClientFactory _blobContainerClientFactory;
 
-        public BlobStorageRepository(BlobServiceClient blobServiceClient)
+        public BlobStorageRepository(IBlobContainerClientFactory blobContainerClientFactory)
         {
-            _blobServiceClient = blobServiceClient;
+            _blobContainerClientFactory = blobContainerClientFactory;
         }
 
         public async Task<string> SaveWeatherData(Stream weatherData, DateTime now)
         {
-            var containerClient = _blobServiceClient.GetBlobContainerClient("weather-data");
-            await containerClient.CreateIfNotExistsAsync();
+            var containerClient = await _blobContainerClientFactory.Create();
 
             string blobName = $"weather-{now:yyyy-MM-dd-HH-mm-ss}.json";
             var blobClient = containerClient.GetBlobClient(blobName);

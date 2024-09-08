@@ -9,5 +9,9 @@ namespace Interfaces.Utils.Configuration
     public interface IConfigurationManager
     {
         string AzureWebJobsStorage { get; }
+
+        string TableClientName { get; }
+
+        string BlobContainerName { get; }
     }
 }

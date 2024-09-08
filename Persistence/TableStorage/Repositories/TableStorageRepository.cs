@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Data.Tables;
+using Interfaces.Persistence.TableStorage.Clients;
 using Interfaces.Persistence.TableStorage.Mappers;
 using Interfaces.Persistence.TableStorage.Models.Entities;
 using Interfaces.Persistence.TableStorage.Repositories;
@@ -15,22 +16,18 @@ namespace Persistence.TableStorage.Repositories
 {
     public class TableStorageRepository : ITableStorageRepository
     {
-        private readonly IConfigurationManager _configurationManager;
         private readonly IKeysMapper _keysMapper;
+        private readonly ITableClientFactory _tableClientFactory;
 
-        public TableStorageRepository(IConfigurationManager configurationManager, IKeysMapper keysMapper)
+        public TableStorageRepository(IKeysMapper keysMapper, ITableClientFactory tableClientFactory)
         {
-            _configurationManager = configurationManager;
             _keysMapper = keysMapper;
+            _tableClientFactory = tableClientFactory;
         }
 
         public async Task Save(WeatherApiCallLog weatherApiCallLog)
         {
-            var connectionString = _configurationManager.AzureWebJobsStorage;
-            TableServiceClient tableServiceClient = new TableServiceClient(connectionString);
-            TableClient tableClient = tableServiceClient.GetTableClient("weatherData");
-
-            await tableClient.CreateIfNotExistsAsync();
+            var tableClient = await _tableClientFactory.Create();
             await tableClient.AddEntityAsync(weatherApiCallLog);
         }
 
@@ -38,11 +35,6 @@ namespace Persistence.TableStorage.Repositories
         {
             var fromKeys = _keysMapper.Map(from);
             var toKeys = _keysMapper.Map(to);
-
-            var connectionString = _configurationManager.AzureWebJobsStorage;
-            TableServiceClient tableServiceClient = new TableServiceClient(connectionString);
-            TableClient tableClient = tableServiceClient.GetTableClient("weatherData");
-            await tableClient.CreateIfNotExistsAsync();
 
             Expression<Func<WeatherApiCallLog, bool>> oneDayQuery = x =>
                 x.PartitionKey == fromKeys.PartitionKey
@@ -55,8 +47,9 @@ namespace Persistence.TableStorage.Repositories
                     || (x.PartitionKey.CompareTo(toKeys.PartitionKey) == 0 && x.RowKey.CompareTo(toKeys.RowKey) <= 0);
 
             var query = fromKeys.PartitionKey == toKeys.PartitionKey ? oneDayQuery : manyDaysQuery;
-
+            var tableClient = await _tableClientFactory.Create();
             var weatherApiCallLogs = new List<WeatherApiCallLog>();
+
             await foreach (var page in tableClient.QueryAsync(query).AsPages())
             {
                 weatherApiCallLogs.AddRange(page.Values);

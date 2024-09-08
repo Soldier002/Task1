@@ -7,6 +7,10 @@ namespace Utils.Configuration
     {
         public string AzureWebJobsStorage => GetConfig();
 
+        public string TableClientName => GetConfig();
+
+        public string BlobContainerName => GetConfig();
+
         private string GetConfig([CallerMemberName] string callerMemberName = "")
         {
             if (string.IsNullOrEmpty(callerMemberName))
