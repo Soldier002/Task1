@@ -14,13 +14,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{833C625D-5EE5-41B8-8788-3C94B4E7EEAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interfaces", "Interfaces\Interfaces.csproj", "{EEF11EAF-591D-4670-8FFD-EEA8727E9896}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{EEF11EAF-591D-4670-8FFD-EEA8727E9896}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{649A3528-B695-4361-82E3-3FEB95315D2E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration", "Integration\Integration.csproj", "{649A3528-B695-4361-82E3-3FEB95315D2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{916DB101-BB2A-425D-9A67-81E856974592}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{916DB101-BB2A-425D-9A67-81E856974592}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Tests", "Services.Tests\Services.Tests.csproj", "{3FA2DBA8-15EA-4CDD-AFB0-FB498E08175E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Tests", "Services.Tests\Services.Tests.csproj", "{3FA2DBA8-15EA-4CDD-AFB0-FB498E08175E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F13AA1D8-8CE5-4E7B-9ED0-57C503DF11AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3FA2DBA8-15EA-4CDD-AFB0-FB498E08175E} = {F13AA1D8-8CE5-4E7B-9ED0-57C503DF11AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA841B2A-2B7C-4371-ACB3-F398BB4F0ACD}

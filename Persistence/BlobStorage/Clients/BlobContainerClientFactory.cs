@@ -1,12 +1,5 @@
-﻿using Azure.Data.Tables;
-using Azure.Storage.Blobs;
-using Interfaces.Persistence.BlobStorage.Clients;
-using Interfaces.Persistence.TableStorage.Clients;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Azure.Storage.Blobs;
+using Domain.Persistence.BlobStorage.Clients;
 
 namespace Persistence.BlobStorage.Clients
 {

@@ -1,12 +1,5 @@
 ﻿using Azure.Data.Tables;
-using Interfaces.Persistence.TableStorage.Clients;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Persistence.TableStorage.Clients;
 
 namespace Persistence.TableStorage.Clients
 {

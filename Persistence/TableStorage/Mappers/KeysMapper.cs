@@ -1,10 +1,5 @@
-﻿using Interfaces.Persistence.TableStorage.Mappers;
-using Interfaces.Persistence.TableStorage.Models.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Persistence.TableStorage.Mappers;
+using Domain.Persistence.TableStorage.Models.Dtos;
 
 namespace Persistence.TableStorage.Mappers
 {

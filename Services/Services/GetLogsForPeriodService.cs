@@ -1,18 +1,9 @@
 ﻿using Ardalis.GuardClauses;
-using Azure.Core;
-using Interfaces.Persistence.TableStorage.Models.Entities;
-using Interfaces.Persistence.TableStorage.Repositories;
-using Interfaces.Services.Services;
-using Interfaces.Utils.Parsers;
+using Domain.Common.Parsers;
+using Domain.Persistence.TableStorage.Repositories;
+using Domain.Services.Services;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using Persistence.TableStorage.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {

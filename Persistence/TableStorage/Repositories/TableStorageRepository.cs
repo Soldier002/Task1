@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Azure.Data.Tables;
-using Interfaces.Persistence.TableStorage.Clients;
-using Interfaces.Persistence.TableStorage.Mappers;
-using Interfaces.Persistence.TableStorage.Models.Entities;
-using Interfaces.Persistence.TableStorage.Repositories;
-using Interfaces.Utils.Configuration;
+﻿using System.Linq.Expressions;
+using Domain.Persistence.TableStorage.Clients;
+using Domain.Persistence.TableStorage.Mappers;
+using Domain.Persistence.TableStorage.Models.Entities;
+using Domain.Persistence.TableStorage.Repositories;
 
 namespace Persistence.TableStorage.Repositories
 {

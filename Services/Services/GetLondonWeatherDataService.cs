@@ -1,10 +1,8 @@
-﻿using Infrastructure.ApiClients;
-using Interfaces.Infrastructure.ApiClients;
-using Interfaces.Persistence.BlobStorage;
-using Interfaces.Persistence.TableStorage.Models.Entities;
-using Interfaces.Persistence.TableStorage.Repositories;
-using Interfaces.Services.Services;
-using System.Text;
+﻿using Domain.Integration.ApiClients;
+using Domain.Persistence.BlobStorage.Repositories;
+using Domain.Persistence.TableStorage.Models.Entities;
+using Domain.Persistence.TableStorage.Repositories;
+using Domain.Services.Services;
 
 namespace Services.Services
 {
