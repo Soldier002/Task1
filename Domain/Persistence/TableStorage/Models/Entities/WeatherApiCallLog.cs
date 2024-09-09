@@ -13,8 +13,6 @@ namespace Domain.Persistence.TableStorage.Models.Entities
 
         public int HttpStatusCode { get; set; }
 
-        public string ErrorMessage { get; set; }
-
         public string PayloadBlobName { get; set; }
 
         public DateTimeOffset? Timestamp { get; set; } = default!;

@@ -8,7 +8,7 @@ namespace Domain.Persistence.BlobStorage.Repositories
 {
     public interface IBlobStorageRepository
     {
-        Task<string> SaveWeatherData(Stream weatherData, DateTime now, CancellationToken ct);
+        Task SaveWeatherData(Stream weatherData, DateTime now, CancellationToken ct);
 
         Task<Stream> GetWeatherData(string blobName, CancellationToken ct);
     }

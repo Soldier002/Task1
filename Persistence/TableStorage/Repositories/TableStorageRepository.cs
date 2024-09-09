@@ -45,7 +45,6 @@ namespace Persistence.TableStorage.Repositories
             ct.ThrowIfCancellationRequested();
             await foreach (var page in tableClient.QueryAsync(query, cancellationToken: ct).AsPages())
             {
-                ct.ThrowIfCancellationRequested();
                 weatherApiCallLogs.AddRange(page.Values);
             }
 

@@ -16,9 +16,6 @@ namespace Services.Services
 
         public async Task<string> Execute(DateTime from, DateTime to, CancellationToken ct)
         {
-            Guard.Against.Default(from);
-            Guard.Against.Default(to);
-
             var entities = await _tableStorageRepository.GetAll(from, to, ct);
             var data = JsonConvert.SerializeObject(entities);
 
