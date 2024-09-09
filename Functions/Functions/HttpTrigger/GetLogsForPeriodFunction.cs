@@ -51,7 +51,7 @@ namespace Functions.Functions.HttpTrigger
                 }
                 else if (ct.IsCancellationRequested)
                 {
-                    logger.LogInformation("Function canceled by host");
+                    logger.LogInformation("Function canceled by host.");
                 }
 
                 throw;

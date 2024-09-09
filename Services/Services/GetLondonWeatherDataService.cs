@@ -23,13 +23,13 @@ namespace Services.Services
             _weatherApiCallLogMapper = weatherApiCallLogMapper;
         }
 
-        public async Task Execute(DateTime executionDateTime)
+        public async Task Execute(DateTime executionDateTime, CancellationToken ct)
         {
-            using var weatherApiResponse = await _openWeatherMapApiClient.GetWeatherInLondon();
-            using var weatherDataStream = await weatherApiResponse.Content.ReadAsStreamAsync();
-            var blobName = await _blobStorageRepository.SaveWeatherData(weatherDataStream, executionDateTime);
+            using var weatherApiResponse = await _openWeatherMapApiClient.GetWeatherInLondon(ct);
+            using var weatherDataStream = await weatherApiResponse.Content.ReadAsStreamAsync(ct);
+            var blobName = await _blobStorageRepository.SaveWeatherData(weatherDataStream, executionDateTime, ct);
             var weatherApiCallLog = _weatherApiCallLogMapper.Map(weatherApiResponse, executionDateTime, blobName);
-            await _tableStorageRepository.Save(weatherApiCallLog);
+            await _tableStorageRepository.Save(weatherApiCallLog, ct);
         }
     }
 }

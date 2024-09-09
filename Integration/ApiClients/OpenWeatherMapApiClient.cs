@@ -16,9 +16,9 @@ namespace Integration.ApiClients
             _configurationManager = configurationManager;
         }
 
-        public async Task<HttpResponseMessage> GetWeatherInLondon()
+        public async Task<HttpResponseMessage> GetWeatherInLondon(CancellationToken ct)
         {
-            var response = await _httpClient.GetAsync($"{_weatherApiUrl}{_configurationManager.WeatherApiKey}");
+            var response = await _httpClient.GetAsync($"{_weatherApiUrl}{_configurationManager.WeatherApiKey}", ct);
 
             return response;
         }

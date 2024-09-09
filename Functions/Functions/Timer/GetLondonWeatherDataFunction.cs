@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Domain.Services.Services;
 using Microsoft.Azure.WebJobs;
@@ -16,10 +17,10 @@ namespace Functions.Functions.Timer
         }
 
         [FunctionName("GetLondonWeatherDataFunction")]
-        public async Task Run([TimerTrigger("*/5 * * * * *")] TimerInfo timerInfo, ILogger log)
+        public async Task Run([TimerTrigger("*/5 * * * * *")] TimerInfo timerInfo, ILogger log, CancellationToken ct)
         {
             log.LogInformation("GetLondonWeatherDataFunction start");
-            await _getLondonWeatherDataService.Execute(DateTime.UtcNow);
+            await _getLondonWeatherDataService.Execute(DateTime.UtcNow, ct);
             log.LogInformation("GetLondonWeatherDataFunction end");
         }
     }

@@ -17,10 +17,10 @@ namespace Persistence.TableStorage.Repositories
             _tableClientFactory = tableClientFactory;
         }
 
-        public async Task Save(WeatherApiCallLog weatherApiCallLog)
+        public async Task Save(WeatherApiCallLog weatherApiCallLog, CancellationToken ct)
         {
             var tableClient = await _tableClientFactory.Create();
-            await tableClient.AddEntityAsync(weatherApiCallLog);
+            await tableClient.AddEntityAsync(weatherApiCallLog, ct);
         }
 
         public async Task<IList<WeatherApiCallLog>> GetAll(DateTime from, DateTime to, CancellationToken ct)

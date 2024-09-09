@@ -21,7 +21,7 @@ namespace Services.Services
             _blobStorageRepository = blobStorageRepository;
         }
 
-        public async Task<Stream> Execute(string partitionKey, string rowKey)
+        public async Task<Stream> Execute(string partitionKey, string rowKey, CancellationToken ct)
         {
             var keys = new Keys
             {
@@ -30,7 +30,7 @@ namespace Services.Services
             };
 
             var blobName = _blobNameBuilder.Build(keys);
-            var blobStream = await _blobStorageRepository.GetWeatherData(blobName);
+            var blobStream = await _blobStorageRepository.GetWeatherData(blobName, ct);
 
             return blobStream;
         }

@@ -15,22 +15,22 @@ namespace Persistence.BlobStorage.Repositories
             _blobNameBuilder = blobNameBuilder;
         }
 
-        public async Task<string> SaveWeatherData(Stream weatherData, DateTime now)
+        public async Task<string> SaveWeatherData(Stream weatherData, DateTime now, CancellationToken ct)
         {
             var containerClient = await _blobContainerClientFactory.Create();
 
             string blobName = _blobNameBuilder.Build(now);
             var blobClient = containerClient.GetBlobClient(blobName);
-            await blobClient.UploadAsync(weatherData);
+            await blobClient.UploadAsync(weatherData, ct);
 
             return blobName;
         }
 
-        public async Task<Stream> GetWeatherData(string blobName)
+        public async Task<Stream> GetWeatherData(string blobName, CancellationToken ct)
         {
             var containerClient = await _blobContainerClientFactory.Create();
             var blobClient = containerClient.GetBlobClient(blobName);
-            var response = await blobClient.DownloadStreamingAsync();
+            var response = await blobClient.DownloadStreamingAsync(null, ct);
             var stream = response.Value.Content;
 
             return stream;

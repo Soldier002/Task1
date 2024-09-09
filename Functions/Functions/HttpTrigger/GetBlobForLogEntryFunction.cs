@@ -1,4 +1,7 @@
+using System;
+using System.IO;
 using System.Net.Mime;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using Domain.Functions.Validators;
@@ -8,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using Services.Services;
 
 namespace Functions.Functions.HttpTrigger
 {
@@ -26,12 +30,12 @@ namespace Functions.Functions.HttpTrigger
 
         [FunctionName("GetBlobForLogEntryFunction")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest request,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest request, ILogger logger, CancellationToken ct)
         {
             Guard.Against.Null(request);
             Guard.Against.Null(request.Query);
 
+            using var ctSource = CancellationTokenSource.CreateLinkedTokenSource(ct, request.HttpContext.RequestAborted);
             var partitionKeyValidationResult = _partitionKeyValidator.Validate(request.Query["partitionKey"], "partitionKey");
             var rowKeyValidationResult = _rowKeyValidator.Validate(request.Query["rowKey"], "rowKey");
 
@@ -40,8 +44,25 @@ namespace Functions.Functions.HttpTrigger
                 return new BadRequestObjectResult(new { error = partitionKeyValidationResult.ValidationMessages + rowKeyValidationResult.ValidationMessages });
             }
 
-            var blobStream = await _getBlobForLogEntryService.Execute(partitionKeyValidationResult.Value, rowKeyValidationResult.Value);
-            return new FileStreamResult(blobStream, MediaTypeNames.Application.Octet);
+            try
+            {
+                using var blobStream = await _getBlobForLogEntryService.Execute(partitionKeyValidationResult.Value, rowKeyValidationResult.Value, ctSource.Token);
+
+                return new FileStreamResult(blobStream, MediaTypeNames.Application.Octet);
+            }
+            catch (OperationCanceledException)
+            {
+                if (request.HttpContext.RequestAborted.IsCancellationRequested)
+                {
+                    logger.LogInformation("Function canceled by caller.");
+                }
+                else if (ct.IsCancellationRequested)
+                {
+                    logger.LogInformation("Function canceled by host.");
+                }
+
+                throw;
+            }
         }
     }
 }

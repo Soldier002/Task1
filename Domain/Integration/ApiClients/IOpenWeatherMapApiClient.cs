@@ -8,6 +8,6 @@ namespace Domain.Integration.ApiClients
 {
     public interface IOpenWeatherMapApiClient
     {
-        Task<HttpResponseMessage> GetWeatherInLondon();
+        Task<HttpResponseMessage> GetWeatherInLondon(CancellationToken ct);
     }
 }
