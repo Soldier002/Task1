@@ -1,4 +1,6 @@
-﻿using Domain.Persistence.BlobStorage.Builders;
+﻿using Azure;
+using Domain.Common.Exceptions;
+using Domain.Persistence.BlobStorage.Builders;
 using Domain.Persistence.BlobStorage.Clients;
 using Domain.Persistence.BlobStorage.Repositories;
 
@@ -30,10 +32,22 @@ namespace Persistence.BlobStorage.Repositories
         {
             var containerClient = await _blobContainerClientFactory.Create();
             var blobClient = containerClient.GetBlobClient(blobName);
-            var response = await blobClient.DownloadStreamingAsync(null, ct);
-            var stream = response.Value.Content;
+            try
+            {
+                var response = await blobClient.DownloadStreamingAsync(null, ct);
+                var stream = response.Value.Content;
 
-            return stream;
+                return stream;
+            }
+            catch (RequestFailedException ex)
+            {
+                if (ex.Status == 404)
+                {
+                    throw new NotFoundException(ex);
+                }
+
+                throw;
+            }
         }
     }
 }
