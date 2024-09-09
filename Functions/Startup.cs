@@ -1,10 +1,9 @@
 ﻿using Azure.Data.Tables;
 using Azure.Storage.Blobs;
 using Common.Configuration;
-using Common.Parsers;
 using Common.Strings;
 using Domain.Common.Configuration;
-using Domain.Common.Parsers;
+using Domain.Functions.Validators;
 using Domain.Integration.ApiClients;
 using Domain.Persistence.BlobStorage.Clients;
 using Domain.Persistence.BlobStorage.Repositories;
@@ -14,6 +13,7 @@ using Domain.Persistence.TableStorage.Repositories;
 using Domain.Services.Services;
 using Domain.Services.Services.Mappers;
 using Functions;
+using Functions.Validators;
 using Integration.ApiClients;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,7 +53,7 @@ public class Startup : FunctionsStartup
         builder.Services.AddTransient<IOpenWeatherMapApiClient, OpenWeatherMapApiClient>();
         builder.Services.AddTransient<IGetLogsForPeriodService, GetLogsForPeriodService>();
         builder.Services.AddTransient<IKeysMapper, KeysMapper>();
-        builder.Services.AddTransient<IDateTimeParser, DateTimeParser>();
         builder.Services.AddTransient<IWeatherApiCallLogMapper, WeatherApiCallLogMapper>();
+        builder.Services.AddTransient<IDateTimeRangeValidator, DateTimeRangeValidator>();
     }
 }

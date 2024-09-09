@@ -1,8 +1,6 @@
 ﻿using Ardalis.GuardClauses;
-using Domain.Common.Parsers;
 using Domain.Persistence.TableStorage.Repositories;
 using Domain.Services.Services;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace Services.Services
@@ -10,21 +8,16 @@ namespace Services.Services
     public class GetLogsForPeriodService : IGetLogsForPeriodService
     {
         private readonly ITableStorageRepository _tableStorageRepository;
-        private readonly IDateTimeParser _dateTimeParser;
 
-        public GetLogsForPeriodService(ITableStorageRepository tableStorageRepository, IDateTimeParser dateTimeParser)
+        public GetLogsForPeriodService(ITableStorageRepository tableStorageRepository)
         {
             _tableStorageRepository = tableStorageRepository;
-            _dateTimeParser = dateTimeParser;
         }
 
-        public async Task<string> Execute(HttpRequest httpRequest)
+        public async Task<string> Execute(DateTime from, DateTime to)
         {
-            Guard.Against.Null(httpRequest);
-            Guard.Against.Null(httpRequest.Query);
-
-            var from = _dateTimeParser.Parse(httpRequest.Query["from"].ToString());
-            var to = _dateTimeParser.Parse(httpRequest.Query["to"].ToString());
+            Guard.Against.Default(from);
+            Guard.Against.Default(to);
 
             var entities = await _tableStorageRepository.GetAll(from, to);
             var data = JsonConvert.SerializeObject(entities);
