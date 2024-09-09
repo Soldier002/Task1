@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using Domain.Functions.Validators;
@@ -23,10 +25,12 @@ namespace Functions.Functions.HttpTrigger
 
         [FunctionName("GetLogsForPeriodFunction")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest request, ILogger logger)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest request, ILogger logger, CancellationToken ct)
         {
             Guard.Against.Null(request);
             Guard.Against.Null(request.Query);
+
+            using var ctSource = CancellationTokenSource.CreateLinkedTokenSource(ct, request.HttpContext.RequestAborted);
             var validationResult = _dateTimeRangeValidator.Validate(request.Query["from"], request.Query["to"], "from", "to");
 
             if (!validationResult.Success)
@@ -34,7 +38,24 @@ namespace Functions.Functions.HttpTrigger
                 return new BadRequestObjectResult(new { error = validationResult.ValidationMessages });
             }
 
-            var data = await _getLogsForPeriodService.Execute(validationResult.From, validationResult.To);
+            string data;
+            try
+            {
+                data = await _getLogsForPeriodService.Execute(validationResult.From, validationResult.To, ctSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                if (request.HttpContext.RequestAborted.IsCancellationRequested)
+                {
+                    logger.LogInformation("Function canceled by caller.");
+                }
+                else if (ct.IsCancellationRequested)
+                {
+                    logger.LogInformation("Function canceled by host");
+                }
+
+                throw;
+            }
 
             return new OkObjectResult(data);
         }

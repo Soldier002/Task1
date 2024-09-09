@@ -23,7 +23,7 @@ namespace Persistence.TableStorage.Repositories
             await tableClient.AddEntityAsync(weatherApiCallLog);
         }
 
-        public async Task<IList<WeatherApiCallLog>> GetAll(DateTime from, DateTime to)
+        public async Task<IList<WeatherApiCallLog>> GetAll(DateTime from, DateTime to, CancellationToken ct)
         {
             var fromKeys = _keysMapper.Map(from);
             var toKeys = _keysMapper.Map(to);
@@ -42,8 +42,10 @@ namespace Persistence.TableStorage.Repositories
             var tableClient = await _tableClientFactory.Create();
             var weatherApiCallLogs = new List<WeatherApiCallLog>();
 
-            await foreach (var page in tableClient.QueryAsync(query).AsPages())
+            ct.ThrowIfCancellationRequested();
+            await foreach (var page in tableClient.QueryAsync(query, cancellationToken: ct).AsPages())
             {
+                ct.ThrowIfCancellationRequested();
                 weatherApiCallLogs.AddRange(page.Values);
             }
 

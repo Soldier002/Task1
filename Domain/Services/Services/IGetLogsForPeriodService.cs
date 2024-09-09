@@ -9,6 +9,6 @@ namespace Domain.Services.Services
 {
     public interface IGetLogsForPeriodService
     {
-        Task<string> Execute(DateTime from, DateTime to);
+        Task<string> Execute(DateTime from, DateTime to, CancellationToken ct);
     }
 }

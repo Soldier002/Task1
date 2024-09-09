@@ -6,6 +6,6 @@ namespace Domain.Persistence.TableStorage.Repositories
     {
         Task Save(WeatherApiCallLog weatherApiCallLog);
 
-        Task<IList<WeatherApiCallLog>> GetAll(DateTime from, DateTime to);
+        Task<IList<WeatherApiCallLog>> GetAll(DateTime from, DateTime to, CancellationToken ct);
     }
 }
