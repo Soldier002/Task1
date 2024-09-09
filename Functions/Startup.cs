@@ -11,6 +11,7 @@ using Domain.Persistence.TableStorage.Clients;
 using Domain.Persistence.TableStorage.Mappers;
 using Domain.Persistence.TableStorage.Repositories;
 using Domain.Services.Services;
+using Domain.Services.Services.Mappers;
 using Functions;
 using Integration.ApiClients;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
@@ -21,6 +22,7 @@ using Persistence.TableStorage.Clients;
 using Persistence.TableStorage.Mappers;
 using Persistence.TableStorage.Repositories;
 using Services.Services;
+using Services.Services.Mappers;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
@@ -46,5 +48,6 @@ public class Startup : FunctionsStartup
         builder.Services.AddTransient<IGetLogsForPeriodService, GetLogsForPeriodService>();
         builder.Services.AddTransient<IKeysMapper, KeysMapper>();
         builder.Services.AddTransient<IDateTimeParser, DateTimeParser>();
+        builder.Services.AddTransient<IWeatherApiCallLogMapper, WeatherApiCallLogMapper>();
     }
 }

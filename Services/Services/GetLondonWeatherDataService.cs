@@ -1,8 +1,10 @@
-﻿using Domain.Integration.ApiClients;
+﻿using Ardalis.GuardClauses;
+using Domain.Integration.ApiClients;
 using Domain.Persistence.BlobStorage.Repositories;
 using Domain.Persistence.TableStorage.Models.Entities;
 using Domain.Persistence.TableStorage.Repositories;
 using Domain.Services.Services;
+using Domain.Services.Services.Mappers;
 
 namespace Services.Services
 {
@@ -11,29 +13,22 @@ namespace Services.Services
         private readonly IOpenWeatherMapApiClient _openWeatherMapApiClient;
         private readonly IBlobStorageRepository _blobStorageRepository;
         private readonly ITableStorageRepository _tableStorageRepository;
+        private readonly IWeatherApiCallLogMapper _weatherApiCallLogMapper;
 
-        public GetLondonWeatherDataService(IOpenWeatherMapApiClient openWeatherMapApiClient, IBlobStorageRepository blobStorageRepository, ITableStorageRepository tableStorageRepository)
+        public GetLondonWeatherDataService(IOpenWeatherMapApiClient openWeatherMapApiClient, IBlobStorageRepository blobStorageRepository, ITableStorageRepository tableStorageRepository, IWeatherApiCallLogMapper weatherApiCallLogMapper)
         {
             _openWeatherMapApiClient = openWeatherMapApiClient;
             _blobStorageRepository = blobStorageRepository;
             _tableStorageRepository = tableStorageRepository;
+            _weatherApiCallLogMapper = weatherApiCallLogMapper;
         }
 
         public async Task Execute(DateTime executionDateTime)
         {
             using var weatherApiResponse = await _openWeatherMapApiClient.GetWeatherInLondon();
-
-            var weatherApiCallLog = new WeatherApiCallLog
-            {
-                Success = weatherApiResponse.IsSuccessStatusCode,
-                HttpStatusCode = (int)weatherApiResponse.StatusCode,
-                RowKey = executionDateTime.ToString("HHmmss"),
-                PartitionKey = executionDateTime.ToString("yyyyMMdd"),
-            };
-
-            var weatherDataStream = await weatherApiResponse.Content.ReadAsStreamAsync();
+            using var weatherDataStream = await weatherApiResponse.Content.ReadAsStreamAsync();
             var blobName = await _blobStorageRepository.SaveWeatherData(weatherDataStream, executionDateTime);
-            weatherApiCallLog.PayloadBlobName = blobName;
+            var weatherApiCallLog = _weatherApiCallLogMapper.Map(weatherApiResponse, executionDateTime, blobName);
             await _tableStorageRepository.Save(weatherApiCallLog);
         }
     }
