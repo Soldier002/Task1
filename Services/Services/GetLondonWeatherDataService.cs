@@ -31,7 +31,7 @@ namespace Services.Services
                 PartitionKey = executionDateTime.ToString("yyyyMMdd"),
             };
 
-            var weatherDataStream = weatherApiResponse.Content.ReadAsStream();
+            var weatherDataStream = await weatherApiResponse.Content.ReadAsStreamAsync();
             var blobName = await _blobStorageRepository.SaveWeatherData(weatherDataStream, executionDateTime);
             weatherApiCallLog.PayloadBlobName = blobName;
             await _tableStorageRepository.Save(weatherApiCallLog);
