@@ -5,6 +5,7 @@ using Common.Strings;
 using Domain.Common.Configuration;
 using Domain.Functions.Validators;
 using Domain.Integration.ApiClients;
+using Domain.Persistence.BlobStorage.Builders;
 using Domain.Persistence.BlobStorage.Clients;
 using Domain.Persistence.BlobStorage.Repositories;
 using Domain.Persistence.TableStorage.Clients;
@@ -17,6 +18,7 @@ using Functions.Validators;
 using Integration.ApiClients;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence.BlobStorage.Builders;
 using Persistence.BlobStorage.Clients;
 using Persistence.BlobStorage.Repositories;
 using Persistence.TableStorage.Clients;
@@ -55,5 +57,10 @@ public class Startup : FunctionsStartup
         builder.Services.AddTransient<IKeysMapper, KeysMapper>();
         builder.Services.AddTransient<IWeatherApiCallLogMapper, WeatherApiCallLogMapper>();
         builder.Services.AddTransient<IDateTimeRangeValidator, DateTimeRangeValidator>();
+        builder.Services.AddTransient<IBlobNameBuilder, BlobNameBuilder>();
+        builder.Services.AddTransient<IGetBlobForLogEntryService, GetBlobForLogEntryService>();
+        builder.Services.AddTransient<IDateTimeValidator, DateTimeValidator>();
+        builder.Services.AddTransient<IRowKeyValidator, RowKeyValidator>();
+        builder.Services.AddTransient<IPartitionKeyValidator, PartitionKeyValidator>();
     }
 }

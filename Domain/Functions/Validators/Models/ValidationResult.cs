@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Domain.Functions.Validators.Models
 {
-    public class DateTimeValidationResult
+    public class ValidationResult<T>
     {
         public bool Success { get; set; }
 
         public string ValidationMessages { get; set; } = string.Empty;
 
-        public DateTime Value { get; set; }
+        public T Value { get; set; }
     }
 }
