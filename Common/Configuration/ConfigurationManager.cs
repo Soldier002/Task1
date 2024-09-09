@@ -5,11 +5,15 @@ namespace Common.Configuration
 {
     public class ConfigurationManager : IConfigurationManager
     {
+        // pretend it is in key vault
         public string AzureWebJobsStorage => GetConfig();
 
         public string TableClientName => GetConfig();
 
         public string BlobContainerName => GetConfig();
+
+        // pretend it is in key vault
+        public string WeatherApiKey => GetConfig();
 
         private string GetConfig([CallerMemberName] string callerMemberName = "")
         {

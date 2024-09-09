@@ -1,20 +1,23 @@
-﻿using Domain.Integration.ApiClients;
+﻿using Domain.Common.Configuration;
+using Domain.Integration.ApiClients;
 
 namespace Integration.ApiClients
 {
     public class OpenWeatherMapApiClient : IOpenWeatherMapApiClient
     {
         private readonly HttpClient _httpClient;
-        private readonly string _weatherApi = "https://api.openweathermap.org/data/2.5/weather?q=London&appid=faa625de9ce05a0abdf9cf5850ca5637";
+        private readonly string _weatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?q=London&appid=";
+        private readonly IConfigurationManager _configurationManager;
 
-        public OpenWeatherMapApiClient(IHttpClientFactory httpClientFactory)
+        public OpenWeatherMapApiClient(IHttpClientFactory httpClientFactory, IConfigurationManager configurationManager)
         {
             _httpClient = httpClientFactory.CreateClient();
+            _configurationManager = configurationManager;
         }
 
         public async Task<HttpResponseMessage> GetWeatherInLondon()
         {
-            var response = await _httpClient.GetAsync(_weatherApi);
+            var response = await _httpClient.GetAsync(_weatherApiUrl + _configurationManager);
 
             return response;
         }

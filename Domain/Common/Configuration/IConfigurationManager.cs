@@ -13,5 +13,7 @@ namespace Domain.Common.Configuration
         string TableClientName { get; }
 
         string BlobContainerName { get; }
+
+        string WeatherApiKey { get; }
     }
 }
