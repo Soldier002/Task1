@@ -1,4 +1,5 @@
-﻿using Domain.Common.Configuration;
+﻿using Common.Strings;
+using Domain.Common.Configuration;
 using Domain.Integration.ApiClients;
 
 namespace Integration.ApiClients
@@ -11,13 +12,13 @@ namespace Integration.ApiClients
 
         public OpenWeatherMapApiClient(IHttpClientFactory httpClientFactory, IConfigurationManager configurationManager)
         {
-            _httpClient = httpClientFactory.CreateClient();
+            _httpClient = httpClientFactory.CreateClient(HttpClientNames.WeatherApi);
             _configurationManager = configurationManager;
         }
 
         public async Task<HttpResponseMessage> GetWeatherInLondon()
         {
-            var response = await _httpClient.GetAsync(_weatherApiUrl + _configurationManager);
+            var response = await _httpClient.GetAsync($"{_weatherApiUrl}{_configurationManager}");
 
             return response;
         }

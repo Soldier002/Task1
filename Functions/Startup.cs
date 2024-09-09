@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs;
 using Common.Configuration;
 using Common.Parsers;
+using Common.Strings;
 using Domain.Common.Configuration;
 using Domain.Common.Parsers;
 using Domain.Integration.ApiClients;
@@ -21,8 +22,10 @@ using Persistence.BlobStorage.Repositories;
 using Persistence.TableStorage.Clients;
 using Persistence.TableStorage.Mappers;
 using Persistence.TableStorage.Repositories;
+using Polly;
 using Services.Services;
 using Services.Services.Mappers;
+using System;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
@@ -34,7 +37,10 @@ public class Startup : FunctionsStartup
     {
         var configurationManager = new ConfigurationManager();
 
-        builder.Services.AddHttpClient();
+        builder.Services.AddHttpClient(HttpClientNames.WeatherApi)
+            .AddTransientHttpErrorPolicy(policyBuilder =>
+                policyBuilder.WaitAndRetryAsync(3, retryNumber => TimeSpan.FromMilliseconds(1000)));
+
         builder.Services.AddSingleton(_ => new TableClient(configurationManager.AzureWebJobsStorage, configurationManager.TableClientName));
         builder.Services.AddSingleton(_ => new BlobContainerClient(configurationManager.AzureWebJobsStorage, configurationManager.BlobContainerName));
         builder.Services.AddSingleton<ITableClientFactory, TableClientFactory>();
