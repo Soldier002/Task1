@@ -34,6 +34,7 @@ namespace Functions.Functions.HttpTrigger
         {
             Guard.Against.Null(request);
             Guard.Against.Null(request.Query);
+            Guard.Against.Null(logger);
 
             using var ctSource = CancellationTokenSource.CreateLinkedTokenSource(ct, request.HttpContext.RequestAborted);
             var partitionKeyValidationResult = _partitionKeyValidator.Validate(request.Query["partitionKey"], "partitionKey");
@@ -47,18 +48,17 @@ namespace Functions.Functions.HttpTrigger
             try
             {
                 using var blobStream = await _getBlobForLogEntryService.Execute(partitionKeyValidationResult.Value, rowKeyValidationResult.Value, ctSource.Token);
-
                 return new FileStreamResult(blobStream, MediaTypeNames.Application.Octet);
             }
             catch (OperationCanceledException)
             {
                 if (request.HttpContext.RequestAborted.IsCancellationRequested)
                 {
-                    logger.LogInformation("Function canceled by caller.");
+                    logger.LogInformation("GetBlobForLogEntryFunction canceled by caller.");
                 }
                 else if (ct.IsCancellationRequested)
                 {
-                    logger.LogInformation("Function canceled by host.");
+                    logger.LogInformation("GetBlobForLogEntryFunction canceled by host.");
                 }
 
                 throw;

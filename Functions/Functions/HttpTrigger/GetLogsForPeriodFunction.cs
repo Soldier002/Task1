@@ -29,6 +29,7 @@ namespace Functions.Functions.HttpTrigger
         {
             Guard.Against.Null(request);
             Guard.Against.Null(request.Query);
+            Guard.Against.Null(logger);
 
             using var ctSource = CancellationTokenSource.CreateLinkedTokenSource(ct, request.HttpContext.RequestAborted);
             var validationResult = _dateTimeRangeValidator.Validate(request.Query["from"], request.Query["to"], "from", "to");
@@ -38,26 +39,24 @@ namespace Functions.Functions.HttpTrigger
                 return new BadRequestObjectResult(new { error = validationResult.ValidationMessages });
             }
 
-            string data;
             try
             {
-                data = await _getLogsForPeriodService.Execute(validationResult.From, validationResult.To, ctSource.Token);
+                var data = await _getLogsForPeriodService.Execute(validationResult.From, validationResult.To, ctSource.Token);
+                return new OkObjectResult(data);
             }
             catch (OperationCanceledException)
             {
                 if (request.HttpContext.RequestAborted.IsCancellationRequested)
                 {
-                    logger.LogInformation("Function canceled by caller.");
+                    logger.LogInformation("GetLogsForPeriodFunction canceled by caller.");
                 }
                 else if (ct.IsCancellationRequested)
                 {
-                    logger.LogInformation("Function canceled by host.");
+                    logger.LogInformation("GetLogsForPeriodFunction canceled by host.");
                 }
 
                 throw;
             }
-
-            return new OkObjectResult(data);
         }
     }
 }
