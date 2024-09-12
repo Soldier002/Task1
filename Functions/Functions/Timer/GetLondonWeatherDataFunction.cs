@@ -21,7 +21,7 @@ namespace Functions.Functions.Timer
         }
 
         [FunctionName("GetLondonWeatherDataFunction")]
-        public async Task Run([TimerTrigger("*/5 * * * * *")] TimerInfo timerInfo, ILogger logger, CancellationToken ct)
+        public async Task Run([TimerTrigger("* * * * *")] TimerInfo timerInfo, ILogger logger, CancellationToken ct)
         {
             Guard.Against.Null(logger);
 
