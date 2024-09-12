@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Domain.Common.Strings;
 using Domain.Functions.Validators;
 using Domain.Functions.Validators.Models;
 
@@ -9,7 +10,7 @@ namespace Functions.Validators
     {
         public ValidationResult<DateTime> Validate(string dateTimeStr, string dateTimeStrName)
         {
-            var dateTimeFormat = "yyyy-MM-ddTHH:mm:ss";
+            var dateTimeFormat = DateTimeFormats.Iso8601Format;
             var result = new ValidationResult<DateTime>();
 
             if (string.IsNullOrWhiteSpace(dateTimeStr))

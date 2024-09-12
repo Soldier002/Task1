@@ -4,6 +4,6 @@ namespace Domain.Functions.Validators
 {
     public interface IDateTimeRangeValidator
     {
-        DateTimeRangeValidationResult Validate(string from, string to, string fromName, string toName);
+        ValidationResult<DateTimeRange> Validate(string from, string to, string fromName, string toName);
     }
 }

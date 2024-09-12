@@ -41,7 +41,7 @@ namespace Functions.Functions.HttpTrigger
 
             try
             {
-                var data = await _getLogsForPeriodService.Execute(validationResult.From, validationResult.To, ctSource.Token);
+                var data = await _getLogsForPeriodService.Execute(validationResult.Value.From, validationResult.Value.To, ctSource.Token);
                 return new OkObjectResult(data);
             }
             catch (OperationCanceledException)

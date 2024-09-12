@@ -1,7 +1,8 @@
-﻿using Domain.Functions.Validators.Models;
-using Domain.Functions.Validators;
-using System;
+﻿using System;
 using System.Globalization;
+using Domain.Common.Strings;
+using Domain.Functions.Validators;
+using Domain.Functions.Validators.Models;
 
 namespace Functions.Validators
 {
@@ -9,7 +10,7 @@ namespace Functions.Validators
     {
         public ValidationResult<string> Validate(string rowKey, string rowKeyName)
         {
-            var dateTimeFormat = "HHmmss";
+            var dateTimeFormat = DateTimeFormats.RowKeyTimeFormat;
             var result = new ValidationResult<string>();
 
             if (string.IsNullOrWhiteSpace(rowKey))

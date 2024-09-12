@@ -1,4 +1,5 @@
-﻿using Domain.Functions.Validators;
+﻿using Domain.Common.Strings;
+using Domain.Functions.Validators;
 using Domain.Functions.Validators.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Functions.Validators
     {
         public ValidationResult<string> Validate(string partitionKey, string partitionKeyName)
         {
-            var dateTimeFormat = "yyyyMMdd";
+            var dateTimeFormat = DateTimeFormats.PartitionKeyDateFormat;
             var result = new ValidationResult<string>();
 
             if (string.IsNullOrWhiteSpace(partitionKey))

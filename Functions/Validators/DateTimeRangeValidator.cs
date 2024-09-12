@@ -14,11 +14,11 @@ namespace Functions.Validators
             _dateTimeValidator = dateTimeValidator;
         }
 
-        public DateTimeRangeValidationResult Validate(string from, string to, string fromName, string toName)
+        public ValidationResult<DateTimeRange> Validate(string from, string to, string fromName, string toName)
         {
             var fromValidationResult = _dateTimeValidator.Validate(from, fromName);
             var toValidationResult = _dateTimeValidator.Validate(to, toName);
-            var result = new DateTimeRangeValidationResult();
+            var result = new ValidationResult<DateTimeRange>();
 
             if (!(fromValidationResult.Success && toValidationResult.Success))
             {
@@ -33,8 +33,11 @@ namespace Functions.Validators
             }
 
             result.Success = true;
-            result.From = fromValidationResult.Value;
-            result.To = toValidationResult.Value;
+            result.Value = new DateTimeRange
+            {
+                From = fromValidationResult.Value,
+                To = toValidationResult.Value,
+            };
 
             return result;
         }
