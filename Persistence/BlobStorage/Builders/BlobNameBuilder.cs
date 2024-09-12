@@ -11,7 +11,7 @@ namespace Persistence.BlobStorage.Builders
 {
     public class BlobNameBuilder : IBlobNameBuilder
     {
-        public string Build(DateTime dateTime) => 
+        public string Build(DateTime dateTime) =>
             $"{dateTime.ToString($"{DateTimeFormats.PartitionKeyDateFormat}_{DateTimeFormats.RowKeyTimeFormat}")}_weather";
 
         public string Build(Keys keys) => $"{keys.PartitionKey}_{keys.RowKey}_weather";
