@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Persistence.TableStorage.Models.Entities;
 
 namespace Domain.Services.Services
 {
     public interface IGetLogsForPeriodService
     {
-        Task<string> Execute(DateTime from, DateTime to, CancellationToken ct);
+        Task<IList<WeatherApiCallLog>> Execute(DateTime from, DateTime to, CancellationToken ct);
     }
 }

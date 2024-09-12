@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Functions.Functions.HttpTrigger
 {
@@ -41,8 +42,9 @@ namespace Functions.Functions.HttpTrigger
 
             try
             {
-                var data = await _getLogsForPeriodService.Execute(validationResult.Value.From, validationResult.Value.To, ctSource.Token);
-                return new OkObjectResult(data);
+                var entities = await _getLogsForPeriodService.Execute(validationResult.Value.From, validationResult.Value.To, ctSource.Token);
+                var entitiesJson = JsonConvert.SerializeObject(entities);
+                return new OkObjectResult(entitiesJson);
             }
             catch (OperationCanceledException)
             {

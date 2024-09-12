@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using Domain.Persistence.TableStorage.Models.Entities;
 using Domain.Persistence.TableStorage.Repositories;
 using Domain.Services.Services;
 using Newtonsoft.Json;
@@ -14,12 +15,11 @@ namespace Services.Services
             _tableStorageRepository = tableStorageRepository;
         }
 
-        public async Task<string> Execute(DateTime from, DateTime to, CancellationToken ct)
+        public async Task<IList<WeatherApiCallLog>> Execute(DateTime from, DateTime to, CancellationToken ct)
         {
             var entities = await _tableStorageRepository.GetAll(from, to, ct);
-            var data = JsonConvert.SerializeObject(entities);
 
-            return data;
+            return entities;
         }
     }
 }
